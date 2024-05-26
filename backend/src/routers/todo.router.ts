@@ -46,7 +46,7 @@ export const todoRouter = t.router({
                 .limit(10);
             const totalTodos = await Todo.countDocuments({ owner: user._id, ...input.filters });
             // sending necessary informations for pagination
-            return { todos, currentPage: input.page, totalPages: Math.ceil(totalTodos / 10) };
+            return { todos, currentPage: input.page, totalPages: Math.ceil(totalTodos / 10), user };
         } catch (error) {
             return { error: "Something went wrong" };
         }
