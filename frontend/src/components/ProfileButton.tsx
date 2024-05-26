@@ -5,7 +5,6 @@ import { client } from "@/config/trpc";
 import showToastFromResponse from "@/helpers/showToastFromResponse";
 
 export default function ProfileButton({ user }: { user: IUser }) {
-    console.log(user);
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
