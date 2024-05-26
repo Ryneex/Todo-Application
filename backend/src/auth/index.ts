@@ -45,4 +45,24 @@ export class Auth {
             return null;
         }
     }
+
+    async deleteSession() {
+        const session_id = this.req.cookies.session_id;
+        if (!session_id || !validate(session_id)) return { error: "Invalid Session ID" };
+        try {
+            await Session.deleteOne({ _id: session_id });
+            return { success: "Deleted current users session" };
+        } catch (error) {
+            return { error: "Couldn't delete current users session" };
+        }
+    }
+
+    async deleteAllSessions(userId: string) {
+        try {
+            await Session.deleteMany({ user: userId });
+            return { success: "Deleted current users session" };
+        } catch (error) {
+            return { error: "Couldn't delete current users session" };
+        }
+    }
 }
