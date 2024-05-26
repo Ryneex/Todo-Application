@@ -14,18 +14,20 @@ import { z } from "zod";
 import { client } from "@/config/trpc";
 import { Toaster } from "@/components/shadcn/ui/sonner";
 import showToastFromResponse from "@/helpers/showToastFromResponse";
-import { ITodo } from "../../../backend/src/types/types";
+import { ITodo, IUser } from "../../../backend/src/types/types";
 import { BsThreeDots } from "react-icons/bs";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuShortcut, DropdownMenuTrigger } from "@/components/shadcn/ui/dropdown-menu";
 import Pagination from "./Pagination";
 import { useRouter } from "next/navigation";
 import { CiFilter } from "react-icons/ci";
 import TodoViewer from "./TodoViewer";
+import ProfileButton from "./ProfileButton";
 
 interface Prop {
     todos: ITodo[];
     currentPage: number;
     totalPages: number;
+    user: IUser;
 }
 
 export default function Todos({ data }: { data: Prop }) {
@@ -71,6 +73,12 @@ export default function Todos({ data }: { data: Prop }) {
     return (
         <div className="w-screen h-screen flex items-center justify-center bg-slate-100 xl:p-5">
             <Toaster richColors />
+            <div className="hidden xl:block fixed xl:top-2 xl:right-2">
+                <ProfileButton user={data.user} />
+            </div>
+            <div className="block xl:hidden fixed bottom-2 left-2">
+                <ProfileButton user={data.user} />
+            </div>
             <div className="w-full h-full xl:max-w-6xl xl:max-h-[600px] bg-white rounded-xl shadow-sm border flex flex-col p-3 gap-2">
                 <div className="shrink-0 flex">
                     <h1 className="font-bold mr-auto flex items-center text-lg">Todos</h1>
