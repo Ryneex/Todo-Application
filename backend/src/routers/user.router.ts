@@ -5,6 +5,7 @@ import loginValidation from "../validations/login.validation";
 import signupValidation from "../validations/signup.validation";
 import argon from "argon2";
 import { z } from "zod";
+import Todo from "../db/models/todo.model";
 
 export const userRouter = t.router({
     login: t.procedure.input(loginValidation).mutation(async ({ input, ctx }) => {
@@ -30,6 +31,25 @@ export const userRouter = t.router({
         } catch (error: any) {
             if (error.code === 11000) return { error: "Email already in use" };
             return { error: "Couldn't Signup" };
+        }
+    }),
+    logout: t.procedure.mutation(async ({ ctx }) => {
+        const res = await ctx.auth.deleteSession();
+        if (res.error) return res;
+        ctx.res.cookie("session_id", undefined);
+        return { success: "Logged out successfully" };
+    }),
+    delete: t.procedure.mutation(async ({ ctx }) => {
+        const user = await ctx.auth.getUser();
+        if (!user) return { error: "User isn't logged in" };
+        try {
+            await ctx.auth.deleteAllSessions(user._id);
+            await Todo.deleteMany({ owner: user._id });
+            await User.deleteOne({ _id: user._id });
+            ctx.res.cookie("session_id", undefined);
+            return { success: "Account Deleted Successfully" };
+        } catch (error) {
+            return { error: "Something went wrong" };
         }
     }),
     get: t.procedure.input(z.string().optional()).query(async ({ ctx, input }) => {
