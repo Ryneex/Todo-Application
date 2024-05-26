@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import { CiFilter } from "react-icons/ci";
 import TodoViewer from "./TodoViewer";
 import ProfileButton from "./ProfileButton";
+import { toast } from "sonner";
 
 interface Prop {
     todos: ITodo[];
@@ -72,7 +73,7 @@ export default function Todos({ data }: { data: Prop }) {
 
     return (
         <div className="w-screen h-screen flex items-center justify-center bg-slate-100 xl:p-5">
-            <Toaster richColors />
+            <Toaster />
             <div className="hidden xl:block fixed xl:top-2 xl:right-2">
                 <ProfileButton user={data.user} />
             </div>
@@ -151,6 +152,9 @@ export default function Todos({ data }: { data: Prop }) {
                                                     event.stopPropagation();
                                                     const res = await client.todo.update.mutate({ ...e, completed: !e.completed });
                                                     showToastFromResponse(res);
+                                                    if (!("error" in res)) {
+                                                        toast.success(res.completed ? "Task has been set to completed" : "Task has been set to uncompleted", { position: "top-center" });
+                                                    }
                                                     router.refresh();
                                                 }}
                                                 className={`rounded-full select-none cursor-pointer py-0.5 px-3 ${e.completed ? "bg-green-200 text-green-700" : "bg-red-200 text-red-500"}`}
