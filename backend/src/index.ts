@@ -16,11 +16,18 @@ app.use(
     })
 );
 app.use(cookieParser());
+// Implement middleware to log each request with its method and URL
+app.use((req, _, next) => {
+    console.log(`${req.method} ${new URL(req.url, `http://${req.headers.host}`).pathname}`);
+    next()
+});
+
 // creates express middleware for trpc
 const TrpcExpressMiddleware = createExpressMiddleware({
     router: AppRouter,
     createContext,
 });
+
 
 app.use("/trpc", TrpcExpressMiddleware);
 
