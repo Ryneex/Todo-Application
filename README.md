@@ -1,4 +1,5 @@
 # Todo with tRPC
+A company gave me this task with a two-day deadline, requiring a technology (tRPC) I had never used before. I learned and completed it in just one day.
 
 ## Prerequisites
 Ensure you have the following installed on your machine:
