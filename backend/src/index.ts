@@ -28,7 +28,6 @@ const TrpcExpressMiddleware = createExpressMiddleware({
     createContext,
 });
 
-
 app.use("/trpc", TrpcExpressMiddleware);
 
 app.get("/", (_, res: Response) => {
